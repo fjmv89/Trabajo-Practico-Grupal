@@ -62,4 +62,7 @@ El repositorio grupal debe contener, como mínimo:
 - El dataset o instrucciones para obtenerlo.
 - La presentación o un enlace para consultarla.
 
-La fecha de entrega indicada en la consigna es el **6 de noviembre de 2026, antes del inicio de la clase**.
+## 📊 Presentación online
+
+[Ver presentación interactiva](https://fjmv89.github.io/Trabajo-Practico-Grupal/presentacion.html)
+
