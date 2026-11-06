@@ -2,7 +2,7 @@
 
 Trabajo Práctico Grupal de **Laboratorio de Métodos Cuantitativos Aplicados a la Gestión**, Facultad de Ciencias Económicas, Universidad de Buenos Aires.
 
-## Pregunta de investigación
+## Pregunta de investigación que nos planteamos como grupo
 
 ¿Cómo evolucionó el precio de venta al público de los medicamentos registrados por una farmacia entre septiembre de 2025 y septiembre de 2026, y cómo se compara esa variación con la inflación del mismo período?
 
