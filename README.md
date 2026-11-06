@@ -47,7 +47,8 @@ El repositorio grupal debe contener, como mínimo:
 
 ## 📊 Presentación online
 
-[Ver presentación interactiva](https://fjmv89.github.io/Trabajo-Practico-Grupal/presentacion.html)
+[Ver presentación interactiva]
+https://github.com/fjmv89/Trabajo-Practico-Grupal/blob/main/presentacion.html
 
 ## PDF Latex en Overleaf
 - [📄 Ver informe y documentos en Overleaf](https://www.overleaf.com/project/6aeb5f28bc15aa23edd18222/share#16a81525488f8afa71b73878971a64ecc7092d17e7890044)
