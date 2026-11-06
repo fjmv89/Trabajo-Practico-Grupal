@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presentación - Mercado Farmacéutico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wdth,wght@62.5..100,100..900&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  /* Paleta y tipografía base */
+  :root {
+    --fondo: #EFEEEA;
+    --superficie: #FFFFFF;
+    --linea: #1A1A1A;
+    --texto: #1A1A1A;
+    --titulo: #171C2E;
+    --tenue: #57544E;
+    --borde: rgba(26, 26, 26, 0.16);
+    --acento: #A9CDB1; /* Verde pastel */
+    --gris: #D6D2C8;
+    --serif: 'Noto Serif Display', Georgia, serif;
+    --sans: 'Poppins', system-ui, -apple-system, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: var(--sans); color: var(--texto); background-color: var(--fondo);
+    /* Textura: rayas diagonales */
+    background-image: repeating-linear-gradient(45deg, rgba(26,26,26,.04) 0 2px, transparent 2px 14px);
+  }
+
+  /* Diapositivas centradas (con transición deslizante entre slides) */
+  .slide {
+    position: absolute; inset: 0; z-index: 1;
+    padding: 63px 112px 99px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 1.5rem;
+    opacity: 0; visibility: hidden; transform: translateX(70px);
+    transition: opacity .5s ease, transform .7s cubic-bezier(.2,.7,.2,1), visibility .5s;
+    overflow-y: auto;
+  }
+  .slide.pasada { transform: translateX(-70px); }
+  .slide.activa { opacity: 1; visibility: visible; transform: none; }
+  .slide.activa > * { animation: subir .6s ease backwards; }
+  .slide.activa > *:nth-child(2) { animation-delay: .08s; }
+  .slide.activa > *:nth-child(3) { animation-delay: .16s; }
+  .slide.activa > *:nth-child(4) { animation-delay: .24s; }
+  @keyframes subir { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+  h1, h2 { font-family: var(--serif); font-stretch: 68%; font-weight: 800; color: var(--titulo); letter-spacing: -0.01em; line-height: 1.05; }
+  h1 { font-size: clamp(2.4rem, 78px, 4.8rem); max-width: 24ch; }
+  h2 { font-size: clamp(2rem, 64px, 4rem); max-width: 24ch; }
+  
+  /* Subrayado verde pastel (se dibuja de izquierda a derecha) */
+  .hl {
+    text-decoration: none;
+    padding-bottom: 6px;
+    background: linear-gradient(var(--acento), var(--acento)) 0 100% / 100% 6px no-repeat;
+    -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  }
+  .slide.activa .hl { animation: subrayar .9s .5s cubic-bezier(.3,.7,.2,1) backwards; }
+  .slide.activa .hl ~ .hl { animation-delay: .95s; }
+  @keyframes subrayar { from { background-size: 0% 6px; } to { background-size: 100% 6px; } }
+
+  p { color: var(--tenue); font-size: clamp(1.1rem, 26px, 1.4rem); line-height: 1.55; max-width: 60ch; }
+  p.grande { font-size: clamp(1.3rem, 36px, 1.8rem); color: var(--texto); }
+  
+  .etiqueta {
+    display: inline-block; width: fit-content;
+    background: var(--acento); color: var(--texto);
+    font-weight: 700; font-size: clamp(0.8rem, 18px, 1.05rem); letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 0.45em 1.2em; border-radius: 999px;
+  }
+
+  /* Contenedores de contenido */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; width: 100%; max-width: 1100px; margin-top: 1rem; text-align: left; }
+  .tarjeta-info { background: var(--superficie); border: 1.5px solid var(--linea); border-radius: 16px; padding: 1.8rem; }
+  .tarjeta-info h3 { font-family: var(--serif); font-size: 1.5rem; color: var(--titulo); margin-bottom: 0.5rem; }
+
+  /* Lista de viñetas centrada y elegante */
+  .lista-viñetas {
+    background: var(--superficie);
+    border: 1.5px solid var(--linea);
+    border-radius: 16px;
+    padding: 2.2rem 3rem;
+    width: 100%;
+    max-width: 900px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    box-shadow: 4px 4px 0 var(--linea);
+  }
+  .lista-viñetas li {
+    font-size: clamp(1.1rem, 24px, 1.35rem);
+    color: var(--texto);
+    line-height: 1.5;
+    list-style-type: none;
+    position: relative;
+    padding-left: 1.8rem;
+    transition: transform .2s ease;
+  }
+  .lista-viñetas li::before {
+    content: "■";
+    position: absolute;
+    left: 0;
+    color: var(--acento);
+    font-size: 1.1rem;
+    top: -1px;
+  }
+
+  /* Slides con título arriba y viñetas centradas en el resto */
+  .slide-dataset { justify-content: flex-start; padding-top: 80px; gap: 0; }
+  .slide-dataset h2 { font-size: 5.5rem; max-width: none; width: 100%; text-align: center; }
+  .slide-dataset .lista-viñetas {
+    margin-top: auto; margin-bottom: auto;
+    max-width: 1150px;
+    padding: 2.8rem 3.5rem;
+    gap: 2rem;
+  }
+  .slide-dataset .lista-viñetas li { font-size: 1.7rem; padding-left: 2.6rem; line-height: 1.45; }
+  .slide-dataset .lista-viñetas li::before { font-size: 1.4rem; top: 0; }
+
+  /* Slide 7: análisis unitario (viñetas a la izquierda, gráfico a la derecha) */
+  .slide-unitario { padding-top: 50px; }
+  .slide-unitario h2 { font-size: 4.5rem; }
+  .slide-unitario .fila-unitario {
+    display: grid; grid-template-columns: 38% minmax(0, 1fr);
+    align-items: center; gap: 1.8rem;
+    width: 100%; max-width: 1400px;
+    margin-top: 1.4rem; margin-bottom: auto;
+  }
+  .slide-unitario .lista-viñetas {
+    width: 100%; max-width: none; margin: 0;
+    padding: 1.5rem 1.8rem; gap: 1.3rem;
+    box-shadow: 3px 3px 0 var(--linea);
+  }
+  .slide-unitario .lista-viñetas li { font-size: 1.35rem; padding-left: 2rem; line-height: 1.45; }
+  .slide-unitario .lista-viñetas li::before { font-size: 1.1rem; top: 0; }
+  .slide-unitario .grafico { max-width: none; }
+
+  /* Slide 8: conclusión (5 viñetas largas, letra más chica) */
+  .slide-conclusion { padding-top: 40px; }
+  .slide-conclusion h2 { font-size: 4.5rem; }
+  .slide-conclusion .lista-viñetas { max-width: 1450px; padding: 2.2rem 3.4rem; gap: 1.15rem; margin-top: 1rem; }
+  .slide-conclusion .lista-viñetas li { font-size: 1.4rem; padding-left: 2.2rem; line-height: 1.45; }
+  .slide-conclusion .lista-viñetas li::before { font-size: 1.15rem; }
+
+  /* Slide 9: cierre grande tipo "outro" */
+  .slide-outro { gap: 2rem; }
+  .slide-outro h2 { font-size: 11.5rem; max-width: none; line-height: 1; }
+  .slide-outro .hl { padding-bottom: 12px; background-size: 100% 12px; }
+  @keyframes subrayar-grande { from { background-size: 0% 12px; } to { background-size: 100% 12px; } }
+  .slide.activa.slide-outro .hl { animation: subrayar-grande .9s .5s cubic-bezier(.3,.7,.2,1) backwards; }
+
+  /* Slide 10: miembros del grupo */
+  .slide-miembros .contenedor-tabla { max-width: 950px; margin-top: auto; margin-bottom: auto; }
+  .slide-miembros .tabla-resumen { font-size: 1.7rem; }
+  .slide-miembros .tabla-resumen th { font-size: 1.2rem; padding: 1rem 1.2rem; }
+  .slide-miembros .tabla-resumen td { padding: 0.9rem 1.2rem; }
+
+  /* Slide 3 (combinada): resumen mensual (izq) | matriz de troqueles (der) */
+  .slide-resumen { padding-top: 50px; }
+  .slide-resumen h2 { font-size: 4.5rem; }
+  .slide-resumen .fila-resumen {
+    display: grid; grid-template-columns: 1fr 1fr;
+    column-gap: 2rem; row-gap: 1rem;
+    width: 100%; max-width: 1400px;
+    margin-top: 1.4rem; margin-bottom: auto;
+  }
+  .slide-resumen .lista-viñetas {
+    width: 100%; max-width: none; margin: 0;
+    padding: 1.2rem 1.6rem; gap: 0.9rem;
+    justify-content: center;
+    box-shadow: 3px 3px 0 var(--linea);
+  }
+  .slide-resumen .lista-viñetas li { font-size: 1.15rem; padding-left: 1.8rem; line-height: 1.4; }
+  .slide-resumen .lista-viñetas li::before { font-size: 1rem; top: 0; }
+  .slide-resumen .col-tabla { display: flex; flex-direction: column; gap: 0.7rem; min-width: 0; }
+  .slide-resumen .contenedor-tabla { max-width: none; }
+  .slide-resumen .tabla-resumen { font-size: 1rem; }
+  .slide-resumen .tabla-resumen th { font-size: 0.78rem; padding: 0.6rem 0.4rem; }
+  .slide-resumen .tabla-resumen td { padding: 0.55rem 0.4rem; }
+  .slide-resumen .nota { font-size: 0.9rem; max-width: none; text-align: center; }
+
+  /* Slides 4, 5 y 6: título, viñetas, cuadro (izq) y gráfico (der) */
+  .slide-indice { padding-top: 50px; }
+  .slide-indice h2 { font-size: 4.5rem; }
+  .slide-indice > .lista-viñetas {
+    width: 100%; max-width: none;
+    margin: 1.2rem 0 0;
+    padding: 1.2rem 2rem; gap: 0.8rem;
+    box-shadow: 3px 3px 0 var(--linea);
+  }
+  .slide-indice .lista-viñetas li { font-size: 1.5rem; padding-left: 2.2rem; line-height: 1.4; }
+  .slide-indice .lista-viñetas li::before { font-size: 1.2rem; top: 0; }
+  .slide-indice .fila-indice {
+    display: grid; grid-template-columns: 34% minmax(0, 1fr);
+    align-items: center; gap: 1.6rem;
+    width: 100%; max-width: 1400px;
+    margin-top: 1.2rem; margin-bottom: auto;
+  }
+  .slide-indice .contenedor-tabla { max-width: none; }
+  .slide-indice .tabla-indice { font-size: 0.85rem; }
+  .slide-indice .tabla-indice th { font-size: 0.72rem; padding: 0.5rem 0.3rem; }
+  .slide-indice .tabla-indice td { padding: 0.3rem 0.3rem; }
+  .slide-inflacion .tabla-indice { font-size: 0.9rem; }
+  .slide-inflacion .tabla-indice th { font-size: 0.78rem; }
+  .slide-inflacion .tabla-indice td { padding: 0.33rem 0.3rem; }
+
+  /* Slide 6: viñeta y gráfico de barras centrado */
+  .slide-barras .lista-viñetas li { font-size: 1.4rem; }
+  .slide-barras > * { flex-shrink: 0; }
+  .slide-barras .grafico { width: 100%; max-width: 980px; margin-top: 1.2rem; margin-bottom: auto; overflow: visible; }
+  .grafico .grupo-sel { opacity: 0; transition: opacity .15s; }
+
+  /* Gráficos con carteles al pasar el mouse */
+  .grafico { padding: 0.6rem; }
+  .grafico .wrap { position: relative; }
+  .grafico svg { display: block; width: 100%; height: auto; }
+  .grafico text { font-family: var(--sans); fill: var(--texto); }
+  .grafico .hit { cursor: pointer; }
+  .grafico .tip {
+    position: absolute; display: none; z-index: 5; pointer-events: none;
+    background: var(--superficie); border: 1.5px solid var(--linea); border-radius: 10px;
+    box-shadow: 3px 3px 0 var(--linea);
+    padding: 0.45rem 0.75rem; font-size: 0.85rem; line-height: 1.45; text-align: left; white-space: nowrap;
+  }
+  .grafico .tip strong { display: block; font-size: 0.95rem; }
+
+  /* Cuadro (tabla) */
+  .contenedor-tabla {
+    width: 100%; max-width: 1150px;
+    background: var(--superficie);
+    border: 1.5px solid var(--linea);
+    border-radius: 16px;
+    box-shadow: 4px 4px 0 var(--linea);
+    overflow: hidden;
+  }
+  .tabla-resumen { width: 100%; border-collapse: collapse; font-size: 1.15rem; }
+  .tabla-resumen th {
+    background: var(--acento); color: var(--texto);
+    font-weight: 700; font-size: 0.95rem; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 0.7rem 1rem; text-align: center;
+    border-bottom: 1.5px solid var(--linea);
+  }
+  .tabla-resumen td { padding: 0.6rem 1rem; text-align: center; color: var(--texto); border-bottom: 1px solid var(--borde); transition: background .2s ease; }
+  .tabla-resumen td:first-child { font-weight: 700; }
+  .tabla-resumen tbody tr:last-child td { border-bottom: none; }
+  .tabla-resumen tbody tr:nth-child(even) td { background: rgba(169, 205, 177, 0.12); }
+  .tabla-resumen tbody tr:hover td { background: rgba(169, 205, 177, 0.4); }
+
+  /* ══ Animaciones ══ */
+  /* Viñetas: entran una por una */
+  .slide.activa .lista-viñetas li {
+    animation: entra-li .6s cubic-bezier(.2,.7,.2,1) backwards;
+    animation-delay: calc(.4s + var(--i, 0) * .2s);
+  }
+  @keyframes entra-li { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
+  .lista-viñetas li:hover { transform: translateX(6px); }
+
+  /* Filas de los cuadros: aparecen en cascada */
+  .slide.activa tbody tr {
+    animation: fila .45s ease backwards;
+    animation-delay: calc(.55s + var(--r, 0) * .05s);
+  }
+  @keyframes fila { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  /* Cuadros y viñetas: se elevan al pasar el mouse */
+  .lista-viñetas, .contenedor-tabla { transition: transform .25s ease, box-shadow .25s ease; }
+  .lista-viñetas:hover, .contenedor-tabla:not(.grafico):hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--linea) !important; }
+
+  /* Gráficos de líneas: la línea se dibuja y los puntos aparecen */
+  .slide.activa .grafico polyline { animation: trazar 1.8s .6s ease backwards; }
+  .slide.activa .grafico polyline + polyline { animation-delay: 1.1s; }
+  @keyframes trazar {
+    from { stroke-dasharray: var(--len, 2000); stroke-dashoffset: var(--len, 2000); }
+    to   { stroke-dasharray: var(--len, 2000); stroke-dashoffset: 0; }
+  }
+  .grafico .punto, .grafico .pm, .grafico .pi { transform-box: fill-box; transform-origin: center; }
+  .slide.activa .grafico .punto, .slide.activa .grafico .pm, .slide.activa .grafico .pi {
+    animation: aparecer .45s ease backwards;
+    animation-delay: calc(.7s + var(--k, 0) * .11s);
+  }
+  @keyframes aparecer { from { opacity: 0; transform: scale(.2); } to { opacity: 1; transform: scale(1); } }
+
+  /* Gráficos de barras: las barras crecen (con JS) y luego aparecen los valores */
+  
+  .slide.activa .grafico .valor {
+    animation: fundir .4s ease backwards;
+    animation-delay: calc(1s + var(--k, 0) * .08s);
+  }
+  @keyframes fundir { from { opacity: 0; } to { opacity: 1; } }
+
+  /* Fondo animado */
+  #fondo { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+  /* Escenario fijo que se escala entero a la ventana */
+  .escenario { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px;
+               transform: translate(-50%, -50%) scale(var(--escala, 1)); z-index: 1;}
+
+  /* Navegación */
+  .barra { position: fixed; top: 0; left: 0; height: 4px; background: var(--acento); z-index: 10; transition: width .4s; }
+  .pie { position: fixed; bottom: 0; left: 0; right: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between;
+         padding: 0 112px 19.8px; font-size: .82rem; color: #8a867d; pointer-events: none; }
+  .pie .controles { display: flex; gap: .5rem; align-items: center; pointer-events: auto; }
+  .pie button { width: 2.4rem; height: 2.4rem; border-radius: 50%; cursor: pointer; background: transparent; border: 1.5px solid var(--linea); font-size: 1rem; color: var(--texto); transition: background .2s ease, transform .2s ease; }
+  .pie button:hover { background: var(--acento); transform: scale(1.12); }
+  .contador { min-width: 3.5rem; text-align: center; color: var(--tenue); }
+
+  .autores { color: var(--texto); font-weight: 700; font-size: clamp(0.9rem, 20px, 1.15rem); max-width: 80ch; }
+
+  @media (max-width: 900px) {
+    html, body { overflow: auto; }
+    .slide { padding: 56px 16px 90px; justify-content: flex-start; }
+    .escenario { position: static; width: auto; height: auto; transform: none; }
+    .pie { padding: 0 16px 12px; }
+    .slide-dataset h2 { font-size: 3rem; }
+    .slide-dataset .lista-viñetas { margin-top: 2rem; padding: 1.5rem; }
+    .slide-dataset .lista-viñetas li { font-size: 1.2rem; }
+    .contenedor-tabla { overflow-x: auto; }
+    .slide-resumen .fila-resumen { grid-template-columns: 1fr; margin-top: 2rem; }
+    .slide-indice .lista-viñetas li { font-size: 1.2rem; }
+    .slide-indice .fila-indice { grid-template-columns: 1fr; }
+    .slide-unitario .fila-unitario { grid-template-columns: 1fr; margin-top: 2rem; }
+    .slide-outro h2 { font-size: 4rem; }
+    .slide-conclusion .lista-viñetas li { font-size: 1.05rem; }
+    .slide-miembros .tabla-resumen { font-size: 1.1rem; }
+  }
+
+  /* Si el sistema pide reducir el movimiento, se desactivan todas las animaciones */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<canvas id="fondo" aria-hidden="true"></canvas>
+<div class="barra" id="barra"></div>
+<div class="escenario" id="escenario">
+
+<!-- · Slide 1: Portada -->
+<section data-ref="portada" class="slide activa" data-seccion="Universidad de Buenos Aires · 2026">
+  <span class="etiqueta">Trabajo grupal de investigación del Laboratorio de Métodos Cuantitativos Aplicados a la Gestión</span>
+  
+  <h1>
+    ¿Cómo <span class="hl">evolucionó el precio</span> de los medicamentos?<br>
+    ¿<span class="hl">Ganó o perdió</span> contra la inflación?
+  </h1>
+  
+  <p class="grande">Análisis del mercado farmacéutico argentino (septiembre de 2025 a septiembre de 2026).</p>
+  
+  <p class="autores">Selva Borcosqui · Juan Ignacio Civale · Leandro Gaetani · Gabriel Lazo · Francisco Méndez</p>
+</section>
+
+<!-- · Slide 2: Información sobre el data set -->
+<section data-ref="dataset" class="slide slide-dataset" data-seccion="Dataset">
+  <h2>Información sobre el <span class="hl">data set</span></h2>
+  
+  <ul class="lista-viñetas">
+    <li>Este data set contiene información sobre las <strong>ventas de una farmacia</strong> en el período <strong>septiembre de 2025 a septiembre de 2026</strong>.</li>
+    <li>Cuenta con una dimensión total de <strong><span class="num" data-n="42000">42.000</span> registros</strong> de operaciones y transacciones.</li>
+    <li>Se compone de <strong><span class="num" data-n="33">33</span> campos</strong> que detallan variables comerciales, temporales y de precios del sector.</li>
+    <li>Contiene información de <strong>fecha</strong>, <strong>precio neto</strong>, <strong>troquel</strong>, <strong>nombre del laboratorio</strong>, entre otras variables.</li>
+  </ul>
+</section>
+
+<!-- · Slide 3: Análisis (resumen mensual | matriz de troqueles) -->
+<section data-ref="analisis" class="slide slide-dataset slide-resumen" data-seccion="Análisis">
+  <h2><span class="hl">Análisis</span></h2>
+
+  <div class="fila-resumen">
+
+    <!-- Fila 1: viñetas -->
+    <ul class="lista-viñetas">
+      <li>Hicimos un <strong>resumen mensual</strong> el cual contiene: <strong>mes</strong>, <strong>cantidad de registros</strong>, <strong>precio medio</strong> y <strong>precio mediano</strong>.</li>
+    </ul>
+
+    <ul class="lista-viñetas">
+      <li>Esta farmacia vendió <strong><span class="num" data-n="298">298</span> tipos de productos distintos</strong>. Lo sabemos porque cada producto tiene un <strong>troquel distinto</strong>, por lo tanto comparamos cada uno para saber la cantidad de productos distintos vendidos.</li>
+      <li>Creamos una <strong>matriz</strong> donde las entradas (filas) son los <strong>distintos productos</strong> y los campos (columnas) son los <strong>meses</strong>.</li>
+    </ul>
+
+    <!-- Fila 2: cuadros -->
+    <div class="col-tabla">
+      <div class="contenedor-tabla">
+        <table class="tabla-resumen">
+          <thead>
+            <tr>
+              <th>Mes</th>
+              <th>Cantidad de registros</th>
+              <th>Precio medio</th>
+              <th>Precio mediano</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>2025-09</td><td>3.268</td><td>$ 26.962,59</td><td>$ 17.357,97</td></tr>
+            <tr><td>2025-12</td><td>3.090</td><td>$ 29.321,83</td><td>$ 19.050,00</td></tr>
+            <tr><td>2026-03</td><td>3.301</td><td>$ 30.671,52</td><td>$ 19.358,00</td></tr>
+            <tr><td>2026-06</td><td>3.390</td><td>$ 32.745,19</td><td>$ 20.529,00</td></tr>
+            <tr><td>2026-09</td><td>3.096</td><td>$ 35.986,99</td><td>$ 22.597,09</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-tabla">
+      <div class="contenedor-tabla">
+        <table class="tabla-resumen">
+          <thead>
+            <tr>
+              <th>Troquel</th>
+              <th>2025-09</th>
+              <th>2025-10</th>
+              <th>2025-11</th>
+              <th>2025-12</th>
+              <th>2026-01</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1001653</td><td>10.844,46</td><td>10.941,74</td><td>11.282,31</td><td>11.451,54</td><td>11.680,57</td></tr>
+            <tr><td>103643</td><td>37.963,86</td><td>38.132,42</td><td>39.207,45</td><td>39.925,33</td><td>40.083,70</td></tr>
+            <tr><td>165021</td><td>9.524,54</td><td>9.800,00</td><td>10.045,00</td><td>10.199,99</td><td>10.481,33</td></tr>
+            <tr><td>1710911</td><td>21.012,75</td><td>21.643,13</td><td>22.097,63</td><td>22.605,87</td><td>23.171,01</td></tr>
+            <tr><td>1723962</td><td>55.477,33</td><td>56.423,89</td><td>56.798,80</td><td>57.823,73</td><td>58.515,54</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="nota">Extracto de la matriz (troquel × mes).</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- · Slide 4: Análisis (viñetas abajo del título; cuadro a la izquierda y gráfico a la derecha) -->
+<section data-ref="analisis3" class="slide slide-dataset slide-indice" data-seccion="Análisis">
+  <h2><span class="hl">Análisis</span></h2>
+
+  <ul class="lista-viñetas">
+    <li>Este cuadro muestra cómo <strong>varían en porcentaje los precios mes a mes</strong>.</li>
+    <li>Se tomó el mes de <strong>septiembre de 2025 como el 100%</strong>.</li>
+  </ul>
+  
+  <div class="fila-indice">
+    <div class="contenedor-tabla">
+      <table class="tabla-resumen tabla-indice">
+        <thead>
+          <tr>
+            <th>Mes</th>
+            <th>Índice</th>
+            <th>Variación %</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>2025-09</td><td>100,00</td><td>0,00</td></tr>
+          <tr><td>2025-10</td><td>101,59</td><td>1,59</td></tr>
+          <tr><td>2025-11</td><td>103,52</td><td>3,52</td></tr>
+          <tr><td>2025-12</td><td>105,71</td><td>5,71</td></tr>
+          <tr><td>2026-01</td><td>107,90</td><td>7,90</td></tr>
+          <tr><td>2026-02</td><td>110,47</td><td>10,47</td></tr>
+          <tr><td>2026-03</td><td>112,96</td><td>12,96</td></tr>
+          <tr><td>2026-04</td><td>115,55</td><td>15,55</td></tr>
+          <tr><td>2026-05</td><td>118,81</td><td>18,81</td></tr>
+          <tr><td>2026-06</td><td>121,75</td><td>21,75</td></tr>
+          <tr><td>2026-07</td><td>124,10</td><td>24,10</td></tr>
+          <tr><td>2026-08</td><td>126,65</td><td>26,65</td></tr>
+          <tr><td>2026-09</td><td>129,13</td><td>29,13</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Gráfico (se dibuja con los datos del cuadro, ver script al final) -->
+    <div class="contenedor-tabla grafico" id="grafico"></div>
+  </div>
+</section>
+
+<!-- · Slide 5: Análisis inflación (viñeta; cuadro IPC a la izquierda y gráfico comparativo a la derecha) -->
+<section data-ref="inflacion" class="slide slide-dataset slide-indice slide-inflacion" data-seccion="Análisis inflación">
+  <h2><span class="hl">Análisis inflación</span></h2>
+
+  <ul class="lista-viñetas">
+    <li>Tomamos el <strong>IPC nacional</strong> que proporciona el <strong>INDEC</strong>.</li>
+  </ul>
+
+  <div class="fila-indice">
+    <div class="contenedor-tabla">
+      <table class="tabla-resumen tabla-indice">
+        <thead>
+          <tr>
+            <th>Mes</th>
+            <th>Índice IPC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>2025-09</td><td>100,00</td></tr>
+          <tr><td>2025-10</td><td>102,30</td></tr>
+          <tr><td>2025-11</td><td>104,86</td></tr>
+          <tr><td>2025-12</td><td>107,79</td></tr>
+          <tr><td>2026-01</td><td>110,92</td></tr>
+          <tr><td>2026-02</td><td>114,14</td></tr>
+          <tr><td>2026-03</td><td>118,02</td></tr>
+          <tr><td>2026-04</td><td>121,09</td></tr>
+          <tr><td>2026-05</td><td>123,63</td></tr>
+          <tr><td>2026-06</td><td>125,98</td></tr>
+          <tr><td>2026-07</td><td>128,62</td></tr>
+          <tr><td>2026-08</td><td>130,81</td></tr>
+          <tr><td>2026-09</td><td>133,29</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Gráfico comparativo (se dibuja con los datos de los cuadros, ver script al final) -->
+    <div class="contenedor-tabla grafico" id="grafico2"></div>
+  </div>
+</section>
+
+<!-- · Slide 6: Análisis inflación (viñeta + gráfico de barras de variación mensual) -->
+<section data-ref="barras" class="slide slide-dataset slide-indice slide-barras" data-seccion="Análisis inflación">
+  <h2><span class="hl">Análisis inflación</span></h2>
+
+  <ul class="lista-viñetas">
+    <li>Con este <strong>gráfico de barras</strong> podemos ver mejor qué períodos <strong>ganan</strong> y cuáles <strong>pierden</strong> los 298 medicamentos frente a la inflación.</li>
+  </ul>
+
+  <!-- Gráfico de barras (se dibuja con código, ver script al final) -->
+  <div class="contenedor-tabla grafico" id="grafico3"></div>
+</section>
+
+<!-- · Slide 7: Análisis unitario de los 298 medicamentos (viñetas a la izquierda, gráfico a la derecha) -->
+<section data-ref="unitario" class="slide slide-dataset slide-unitario" data-seccion="Análisis unitario">
+  <h2><span class="hl">Análisis unitario de los 298 medicamentos</span></h2>
+
+  <div class="fila-unitario">
+    <ul class="lista-viñetas">
+      <li>De los 298 medicamentos, <strong>194 (65,1%)</strong> aumentaron su precio <strong>hasta el IPC</strong> y <strong>100 (33,6%)</strong> lo hicieron <strong>por encima del IPC</strong>.</li>
+      <li>Solo <strong>2 medicamentos</strong> no tuvieron cambios y <strong>2</strong> tuvieron una <strong>reducción</strong>: son casos aislados.</li>
+    </ul>
+
+    <!-- Gráfico de barras por categoría (se dibuja con código, ver script al final) -->
+    <div class="contenedor-tabla grafico" id="grafico4"></div>
+  </div>
+</section>
+
+<!-- · Slide 8: Conclusión del análisis -->
+<section data-ref="conclusion" class="slide slide-dataset slide-conclusion" data-seccion="Conclusión">
+  <h2><span class="hl">Conclusión del análisis</span></h2>
+
+  <ul class="lista-viñetas">
+    <li>Podemos dividir el análisis en <strong>dos etapas</strong>. <strong>Primera etapa:</strong> octubre de 2025 a abril de 2026. <strong>Segunda etapa:</strong> mayo de 2026 a septiembre de 2026.</li>
+    <li><strong>Primera etapa (octubre de 2025 a abril de 2026): los medicamentos perdieron.</strong> Durante todos estos meses, los precios de los medicamentos subieron a un ritmo menor que la inflación general.</li>
+    <li><strong>Segunda etapa (mayo de 2026 a septiembre de 2026): los medicamentos ganaron.</strong> A partir de mayo, la tendencia se invirtió. Los ajustes de precios de las farmacéuticas superaron a la inflación en la mayoría de los meses.</li>
+    <li>El análisis evidencia un <strong>encarecimiento generalizado</strong> en el sector, ya que la inmensa mayoría de los medicamentos (<strong>98,7%</strong>) registró aumentos de precio. Cabe resaltar que <strong>una de cada tres medicinas (33,6%)</strong> subió por encima de la inflación general (IPC), mientras que los casos en los que el precio se mantuvo o bajó son aislados y prácticamente nulos.</li>
+    <li>Desde una perspectiva de <strong>gestión</strong>, los resultados pueden utilizarse como punto de partida para implementar un <strong>seguimiento periódico de precios</strong>, detectar <strong>variaciones atípicas</strong> y mejorar la <strong>planificación de compras</strong>.</li>
+  </ul>
+</section>
+
+<!-- · Slide 9: Cierre -->
+<section data-ref="gracias" class="slide slide-outro" data-seccion="Cierre">
+  <h2><span class="hl">Gracias</span> por<br>escucharnos</h2>
+</section>
+
+<!-- · Slide 10: Miembros del grupo -->
+<section data-ref="miembros" class="slide slide-dataset slide-miembros" data-seccion="Equipo">
+  <h2><span class="hl">Miembros del grupo</span></h2>
+
+  <div class="contenedor-tabla">
+    <table class="tabla-resumen">
+      <thead>
+        <tr>
+          <th>Alumnos</th>
+          <th>Número de registro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Selva Borcosqui</td><td>922457</td></tr>
+        <tr><td>Juan Ignacio Civale</td><td>922228</td></tr>
+        <tr><td>Leandro Gaetani</td><td>922139</td></tr>
+        <tr><td>Gabriel Lazo</td><td>922176</td></tr>
+        <tr><td>Francisco Méndez</td><td>922206</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</div>
+
+<footer class="pie">
+  <span id="pie-seccion"></span>
+  <div class="controles">
+    <button id="ant" aria-label="Anterior">←</button>
+    <span class="contador" id="contador"></span>
+    <button id="sig" aria-label="Siguiente">→</button>
+  </div>
+</footer>
+
+<script>
+/* ══ Motor de Navegación ══ */
+const slides = [...document.querySelectorAll('.slide')];
+const reducirMov = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let actual = 0;
+
+/* Índices para escalonar las animaciones (viñetas y filas de los cuadros) */
+document.querySelectorAll('.lista-viñetas').forEach(ul => [...ul.children].forEach((li, i) => li.style.setProperty('--i', i)));
+document.querySelectorAll('tbody').forEach(tb => [...tb.rows].forEach((tr, i) => tr.style.setProperty('--r', i)));
+
+/* Contadores: los números con clase "num" cuentan desde 0 al entrar a la slide */
+function iniciarContadores(slide) {
+  slide.querySelectorAll('.num').forEach(el => {
+    const n = +el.dataset.n, fmt = v => v.toLocaleString('es-AR');
+    const id = el._id = (el._id || 0) + 1;
+    el.textContent = fmt(n);
+    if (reducirMov) return;
+    el.textContent = fmt(0);
+    setTimeout(() => {
+      const t0 = performance.now();
+      (function paso(t) {
+        if (el._id !== id) return;
+        const p = Math.min(1, (t - t0) / 1400);
+        el.textContent = fmt(Math.round(n * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) requestAnimationFrame(paso);
+      })(t0);
+    }, 500);
+  });
+}
+
+function ir(i) {
+  actual = Math.max(0, Math.min(slides.length - 1, i));
+  slides.forEach((s, k) => {
+    s.classList.toggle('activa', k === actual);
+    s.classList.toggle('pasada', k < actual);
+  });
+  document.getElementById('barra').style.width = slides.length > 1 ? ((actual + 1) / slides.length * 100) + '%' : '100%';
+  document.getElementById('contador').textContent = `${actual + 1} / ${slides.length}`;
+  document.getElementById('pie-seccion').textContent = slides[actual].dataset.seccion || '';
+  iniciarContadores(slides[actual]);
+  if (slides[actual].dataset.ref === 'barras' && window.animarBarras) window.animarBarras();
+  if (slides[actual].dataset.ref === 'unitario' && window.animarBarras2) window.animarBarras2();
+}
+document.getElementById('sig').addEventListener('click', () => ir(actual + 1));
+document.getElementById('ant').addEventListener('click', () => ir(actual - 1));
+document.addEventListener('keydown', e => {
+  if (['INPUT', 'SELECT'].includes(e.target.tagName)) return;
+  if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); ir(actual + 1); }
+  if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); ir(actual - 1); }
+  if (e.key === 'f') (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()).catch(() => {});
+});
+
+/* Escala del escenario */
+function ajustarEscala() {
+  const e = innerWidth <= 900 ? 1 : Math.min(innerWidth / 1600, innerHeight / 900);
+  document.documentElement.style.setProperty('--escala', e);
+}
+addEventListener('resize', ajustarEscala); 
+ajustarEscala();
+ir(0);
+
+/* Largo de cada línea de los gráficos (para la animación de "dibujado") */
+function medirLineas(cont) {
+  cont.querySelectorAll('polyline').forEach(p => {
+    try { p.style.setProperty('--len', Math.ceil(p.getTotalLength()) + 2); } catch (e) {}
+  });
+}
+
+/* ══ Gráfico 1: evolución del índice de precios (slide 4) ══ */
+(function grafico() {
+  const meses = ['2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08','2026-09'];
+  const vals  = [100, 101.59, 103.52, 105.71, 107.90, 110.47, 112.96, 115.55, 118.81, 121.75, 124.10, 126.65, 129.13];
+  const W = 900, H = 480, x0 = 85, x1 = 880, y0 = 46, y1 = 380, ymin = 98.5, ymax = 130.5;
+  const X = i => x0 + (i + 0.6) / 13.2 * (x1 - x0);
+  const Y = v => y1 - (v - ymin) / (ymax - ymin) * (y1 - y0);
+  const fmt = n => n.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Evolución del índice de precios de septiembre de 2025 a septiembre de 2026">`;
+  s += `<text x="${(x0 + x1) / 2}" y="28" text-anchor="middle" font-size="20">Evolución del precio promedio de 298 medicamentos</text>`;
+  /* Cuadrícula y ejes */
+  for (let v = 100; v <= 130; v += 5) {
+    s += `<line x1="${x0}" x2="${x1}" y1="${Y(v)}" y2="${Y(v)}" stroke="rgba(26,26,26,.12)"/>`;
+    s += `<line x1="${x0 - 5}" x2="${x0}" y1="${Y(v)}" y2="${Y(v)}" stroke="#1A1A1A"/>`;
+    s += `<text x="${x0 - 10}" y="${Y(v) + 5}" text-anchor="end" font-size="14">${v}</text>`;
+  }
+  meses.forEach((m, i) => {
+    const x = X(i);
+    s += `<line x1="${x}" x2="${x}" y1="${y0}" y2="${y1}" stroke="rgba(26,26,26,.12)"/>`;
+    s += `<line x1="${x}" x2="${x}" y1="${y1}" y2="${y1 + 5}" stroke="#1A1A1A"/>`;
+    s += `<text x="${x}" y="${y1 + 18}" transform="rotate(-45 ${x} ${y1 + 18})" text-anchor="end" font-size="13">${m}</text>`;
+  });
+  s += `<rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" fill="none" stroke="#1A1A1A"/>`;
+  /* Línea, puntos y zonas sensibles al mouse */
+  s += `<polyline fill="none" stroke="#0D6B1A" stroke-width="2.5" points="${vals.map((v, i) => X(i) + ',' + Y(v)).join(' ')}"/>`;
+  vals.forEach((v, i) => { s += `<circle class="punto" style="--k:${i}" cx="${X(i)}" cy="${Y(v)}" r="5" fill="#006400"/>`; });
+  vals.forEach((v, i) => { s += `<circle class="hit" data-i="${i}" cx="${X(i)}" cy="${Y(v)}" r="16" fill="transparent"/>`; });
+  /* Títulos de ejes */
+  s += `<text x="24" y="${(y0 + y1) / 2}" transform="rotate(-90 24 ${(y0 + y1) / 2})" text-anchor="middle" font-size="14">Índice promedio (septiembre de 2025 = 100)</text>`;
+  s += `<text x="${(x0 + x1) / 2}" y="${H - 10}" text-anchor="middle" font-size="14">Mes</text>`;
+  s += `</svg>`;
+
+  const cont = document.getElementById('grafico');
+  cont.innerHTML = `<div class="wrap">${s}<div class="tip"></div></div>`;
+  medirLineas(cont);
+
+  /* Cartel al pasar el mouse: mes, índice y variación % */
+  const tip = cont.querySelector('.tip');
+  const puntos = cont.querySelectorAll('.punto');
+  cont.querySelectorAll('.hit').forEach(el => {
+    const i = +el.dataset.i;
+    el.addEventListener('mouseenter', () => {
+      tip.innerHTML = `<strong>${meses[i]}</strong>Índice: ${fmt(vals[i])}<br>Variación: ${fmt(vals[i] - 100)} %`;
+      tip.style.left = (X(i) / W * 100) + '%';
+      tip.style.top = (Y(vals[i]) / H * 100) + '%';
+      const dx = i > 10 ? '-90%' : '-50%';
+      const dy = i < 6 ? 'calc(-100% - 14px)' : '16px';
+      tip.style.transform = `translate(${dx}, ${dy})`;
+      tip.style.display = 'block';
+      puntos[i].setAttribute('r', 8);
+    });
+    el.addEventListener('mouseleave', () => {
+      tip.style.display = 'none';
+      puntos[i].setAttribute('r', 5);
+    });
+  });
+})();
+
+/* ══ Gráfico 2: precios de medicamentos vs IPC nacional (slide 5) ══ */
+(function grafico2() {
+  const meses = ['2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08','2026-09'];
+  const med = [100, 101.59, 103.52, 105.71, 107.90, 110.47, 112.96, 115.55, 118.81, 121.75, 124.10, 126.65, 129.13];
+  const ipc = [100, 102.30, 104.86, 107.79, 110.92, 114.14, 118.02, 121.09, 123.63, 125.98, 128.62, 130.81, 133.29];
+  const W = 900, H = 480, x0 = 85, x1 = 880, y0 = 46, y1 = 380, ymin = 98.5, ymax = 135;
+  const paso = (x1 - x0) / 13.2;
+  const X = i => x0 + (i + 0.6) * paso;
+  const Y = v => y1 - (v - ymin) / (ymax - ymin) * (y1 - y0);
+  const fmt = n => n.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const VERDE = '#006400', ROJO = '#8B0000';
+
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Evolución de los precios de medicamentos y del IPC nacional, septiembre de 2025 a septiembre de 2026">`;
+  s += `<text x="${(x0 + x1) / 2}" y="28" text-anchor="middle" font-size="20">Evolución de precios de medicamentos e IPC nacional</text>`;
+  /* Cuadrícula y ejes */
+  for (let v = 100; v <= 130; v += 5) {
+    s += `<line x1="${x0}" x2="${x1}" y1="${Y(v)}" y2="${Y(v)}" stroke="rgba(26,26,26,.12)"/>`;
+    s += `<line x1="${x0 - 5}" x2="${x0}" y1="${Y(v)}" y2="${Y(v)}" stroke="#1A1A1A"/>`;
+    s += `<text x="${x0 - 10}" y="${Y(v) + 5}" text-anchor="end" font-size="14">${v}</text>`;
+  }
+  meses.forEach((m, i) => {
+    const x = X(i);
+    s += `<line x1="${x}" x2="${x}" y1="${y0}" y2="${y1}" stroke="rgba(26,26,26,.12)"/>`;
+    s += `<line x1="${x}" x2="${x}" y1="${y1}" y2="${y1 + 5}" stroke="#1A1A1A"/>`;
+    s += `<text x="${x}" y="${y1 + 18}" transform="rotate(-45 ${x} ${y1 + 18})" text-anchor="end" font-size="13">${m}</text>`;
+  });
+  s += `<rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" fill="none" stroke="#1A1A1A"/>`;
+  /* Líneas y puntos */
+  s += `<polyline fill="none" stroke="${VERDE}" stroke-width="2.5" points="${med.map((v, i) => X(i) + ',' + Y(v)).join(' ')}"/>`;
+  s += `<polyline fill="none" stroke="${ROJO}" stroke-width="2.5" points="${ipc.map((v, i) => X(i) + ',' + Y(v)).join(' ')}"/>`;
+  med.forEach((v, i) => { s += `<circle class="pm" style="--k:${i}" cx="${X(i)}" cy="${Y(v)}" r="5" fill="${VERDE}"/>`; });
+  ipc.forEach((v, i) => { s += `<circle class="pi" style="--k:${i + 4}" cx="${X(i)}" cy="${Y(v)}" r="5" fill="${ROJO}"/>`; });
+  /* Leyenda */
+  s += `<rect x="${x0 + 8}" y="${y0 + 8}" width="215" height="58" rx="6" fill="#fff" stroke="rgba(26,26,26,.25)"/>`;
+  s += `<line x1="${x0 + 18}" x2="${x0 + 42}" y1="${y0 + 26}" y2="${y0 + 26}" stroke="${VERDE}" stroke-width="2.5"/><circle cx="${x0 + 30}" cy="${y0 + 26}" r="5" fill="${VERDE}"/>`;
+  s += `<text x="${x0 + 52}" y="${y0 + 31}" font-size="14">Precios de medicamentos</text>`;
+  s += `<line x1="${x0 + 18}" x2="${x0 + 42}" y1="${y0 + 48}" y2="${y0 + 48}" stroke="${ROJO}" stroke-width="2.5"/><circle cx="${x0 + 30}" cy="${y0 + 48}" r="5" fill="${ROJO}"/>`;
+  s += `<text x="${x0 + 52}" y="${y0 + 53}" font-size="14">IPC nacional</text>`;
+  /* Zonas sensibles al mouse (una franja por mes) */
+  meses.forEach((m, i) => { s += `<rect class="hit" data-i="${i}" x="${X(i) - paso / 2}" y="${y0}" width="${paso}" height="${y1 - y0}" fill="transparent"/>`; });
+  /* Títulos de ejes */
+  s += `<text x="24" y="${(y0 + y1) / 2}" transform="rotate(-90 24 ${(y0 + y1) / 2})" text-anchor="middle" font-size="14">Índice (septiembre de 2025 = 100)</text>`;
+  s += `<text x="${(x0 + x1) / 2}" y="${H - 10}" text-anchor="middle" font-size="14">Mes</text>`;
+  s += `</svg>`;
+
+  const cont = document.getElementById('grafico2');
+  cont.innerHTML = `<div class="wrap">${s}<div class="tip"></div></div>`;
+  medirLineas(cont);
+
+  /* Cartel al pasar el mouse: mes, índice de medicamentos e índice IPC */
+  const tip = cont.querySelector('.tip');
+  const pm = cont.querySelectorAll('.pm');
+  const pi = cont.querySelectorAll('.pi');
+  cont.querySelectorAll('.hit').forEach(el => {
+    const i = +el.dataset.i;
+    el.addEventListener('mouseenter', () => {
+      tip.innerHTML = `<strong>${meses[i]}</strong>Medicamentos: ${fmt(med[i])}<br>IPC nacional: ${fmt(ipc[i])}`;
+      tip.style.left = (X(i) / W * 100) + '%';
+      const arriba = i < 6;
+      tip.style.top = ((arriba ? Y(ipc[i]) : Y(med[i])) / H * 100) + '%';
+      const dx = i > 10 ? '-90%' : '-50%';
+      tip.style.transform = `translate(${dx}, ${arriba ? 'calc(-100% - 14px)' : '16px'})`;
+      tip.style.display = 'block';
+      pm[i].setAttribute('r', 8);
+      pi[i].setAttribute('r', 8);
+    });
+    el.addEventListener('mouseleave', () => {
+      tip.style.display = 'none';
+      pm[i].setAttribute('r', 5);
+      pi[i].setAttribute('r', 5);
+    });
+  });
+})();
+
+/* ══ Gráfico 3: variación mensual, medicamentos vs IPC (slide 6) ══ */
+(function grafico3() {
+  const meses = ['2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08','2026-09'];
+  const med = [1.59, 1.89, 2.12, 2.07, 2.38, 2.26, 2.29, 2.82, 2.47, 1.94, 2.05, 1.96];
+  const ipc = [2.3, 2.5, 2.8, 2.9, 2.9, 3.4, 2.6, 2.1, 1.9, 2.1, 1.7, 1.9];
+  const W = 1000, H = 450, x0 = 70, x1 = 980, y0 = 55, y1 = 350, ymax = 3.5, bw = 30;
+  const gw = (x1 - x0) / meses.length;
+  const cx = i => x0 + (i + 0.5) * gw;
+  const Y = v => y1 - v / ymax * (y1 - y0);
+  const dec = (n, d) => n.toFixed(d).replace('.', ',');
+  const VERDE = '#006400', ROJO = '#8B0000';
+
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Variación mensual de los precios de medicamentos y del IPC nacional, de octubre de 2025 a septiembre de 2026">`;
+  s += `<text x="${(x0 + x1) / 2}" y="22" text-anchor="middle" font-size="19">Variación mensual: medicamentos vs. IPC</text>`;
+
+  /* Sombreado de las dos etapas */
+  s += `<rect x="${x0}" y="${y0}" width="${gw * 7}" height="${y1 - y0}" fill="rgba(139,0,0,.06)"/>`;
+  s += `<rect x="${x0 + gw * 7}" y="${y0}" width="${gw * 5}" height="${y1 - y0}" fill="rgba(0,100,0,.08)"/>`;
+  s += `<text x="${x0 + gw * 3.5}" y="${y0 - 8}" text-anchor="middle" font-size="13" font-weight="700">Etapa 1: perdieron</text>`;
+  s += `<text x="${x0 + gw * 9.5}" y="${y0 - 8}" text-anchor="middle" font-size="13" font-weight="700">Etapa 2: ganaron</text>`;
+
+  /* Cuadrícula horizontal y eje Y */
+  for (let v = 0; v <= 3.5; v += 0.5) {
+    s += `<line x1="${x0}" x2="${x1}" y1="${Y(v)}" y2="${Y(v)}" stroke="rgba(26,26,26,.12)"/>`;
+    s += `<line x1="${x0 - 5}" x2="${x0}" y1="${Y(v)}" y2="${Y(v)}" stroke="#1A1A1A"/>`;
+    s += `<text x="${x0 - 10}" y="${Y(v) + 5}" text-anchor="end" font-size="14">${dec(v, 1)}</text>`;
+  }
+
+  /* Resaltado del mes (aparece al pasar el mouse) */
+  meses.forEach((m, i) => {
+    s += `<rect class="grupo-sel" data-i="${i}" x="${x0 + i * gw}" y="${y0}" width="${gw}" height="${y1 - y0}" fill="rgba(26,26,26,.09)"/>`;
+  });
+
+  /* Barras, valores y nombres de mes */
+  meses.forEach((m, i) => {
+    const c = cx(i);
+    s += `<rect class="bar-g" data-k="${i * 2}" data-y="${Y(med[i])}" data-h="${y1 - Y(med[i])}" x="${c - bw}" y="${Y(med[i])}" width="${bw}" height="${y1 - Y(med[i])}" fill="${VERDE}"/>`;
+    s += `<rect class="bar-g" data-k="${i * 2 + 1}" data-y="${Y(ipc[i])}" data-h="${y1 - Y(ipc[i])}" x="${c}" y="${Y(ipc[i])}" width="${bw}" height="${y1 - Y(ipc[i])}" fill="${ROJO}"/>`;
+    s += `<text class="valor" style="--k:${i * 2}" x="${c - bw / 2}" y="${Y(med[i]) - 5}" text-anchor="middle" font-size="11" font-weight="700">${dec(med[i], 2)}</text>`;
+    s += `<text class="valor" style="--k:${i * 2 + 1}" x="${c + bw / 2}" y="${Y(ipc[i]) - 5}" text-anchor="middle" font-size="11" font-weight="700">${dec(ipc[i], 1)}</text>`;
+    s += `<line x1="${c}" x2="${c}" y1="${y1}" y2="${y1 + 5}" stroke="#1A1A1A"/>`;
+    s += `<text x="${c}" y="${y1 + 18}" transform="rotate(-45 ${c} ${y1 + 18})" text-anchor="end" font-size="13">${m}</text>`;
+  });
+  s += `<rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" fill="none" stroke="#1A1A1A"/>`;
+
+  /* Leyenda (arriba a la derecha) */
+  const lx = x1 - 175, ly = y0 + 8;
+  s += `<rect x="${lx}" y="${ly}" width="165" height="58" rx="6" fill="#fff" stroke="rgba(26,26,26,.25)"/>`;
+  s += `<rect x="${lx + 10}" y="${ly + 12}" width="22" height="12" fill="${VERDE}"/><text x="${lx + 42}" y="${ly + 23}" font-size="14">Medicamentos</text>`;
+  s += `<rect x="${lx + 10}" y="${ly + 34}" width="22" height="12" fill="${ROJO}"/><text x="${lx + 42}" y="${ly + 45}" font-size="14">IPC nacional</text>`;
+
+  /* Zonas sensibles al mouse (una franja por mes) */
+  meses.forEach((m, i) => {
+    s += `<rect class="hit" data-i="${i}" x="${x0 + i * gw}" y="${y0}" width="${gw}" height="${y1 - y0}" fill="transparent"/>`;
+  });
+
+  /* Títulos de ejes */
+  s += `<text x="24" y="${(y0 + y1) / 2}" transform="rotate(-90 24 ${(y0 + y1) / 2})" text-anchor="middle" font-size="14">Variación mensual (%)</text>`;
+  s += `<text x="${(x0 + x1) / 2}" y="${H - 6}" text-anchor="middle" font-size="14">Mes</text>`;
+  s += `</svg>`;
+
+  const cont = document.getElementById('grafico3');
+  cont.innerHTML = `<div class="wrap">${s}<div class="tip"></div></div>`;
+
+  /* Animación: las barras crecen desde el eje X (se maneja con y/height, sin transform) */
+  window.animarBarras = function () {
+    const barras = cont.querySelectorAll(".bar-g");
+    if (reducirMov) return;
+    barras.forEach(r => { r.setAttribute('y', y1); r.setAttribute('height', 0); });
+    const t0 = performance.now();
+    (function paso(t) {
+      let fin = true;
+      barras.forEach(r => {
+        const k = +r.dataset.k, Yt = +r.dataset.y, Ht = +r.dataset.h;
+        const p = Math.max(0, Math.min(1, (t - t0 - 500 - k * 70) / 700));
+        const e = 1 - Math.pow(1 - p, 3);
+        r.setAttribute('y', y1 - Ht * e);
+        r.setAttribute('height', Ht * e);
+        if (p < 1) fin = false;
+      });
+      if (!fin) requestAnimationFrame(paso);
+    })(t0);
+  };
+
+  /* Cartel al pasar el mouse: valores y veredicto del mes */
+  const tip = cont.querySelector('.tip');
+  const sel = cont.querySelectorAll('.grupo-sel');
+  cont.querySelectorAll('.hit').forEach(el => {
+    const i = +el.dataset.i;
+    el.addEventListener('mouseenter', () => {
+      const dif = med[i] - ipc[i];
+      const gano = dif > 0;
+      tip.innerHTML = `<strong>${meses[i]}</strong>Medicamentos: ${dec(med[i], 2)} %<br>IPC nacional: ${dec(ipc[i], 2)} %<br><b style="color:${gano ? VERDE : ROJO}">${gano ? 'Ganaron' : 'Perdieron'} (${dif > 0 ? '+' : ''}${dec(dif, 2)} p.p.)</b>`;
+      tip.style.left = (cx(i) / W * 100) + '%';
+      tip.style.top = (Y(Math.max(med[i], ipc[i])) / H * 100) + '%';
+      tip.style.transform = `translate(${i > 9 ? '-90%' : i < 2 ? '-10%' : '-50%'}, calc(-100% - 22px))`;
+      tip.style.display = 'block';
+      sel[i].style.opacity = 1;
+    });
+    el.addEventListener('mouseleave', () => {
+      tip.style.display = 'none';
+      sel[i].style.opacity = 0;
+    });
+  });
+})();
+
+/* ══ Gráfico 4: medicamentos según variación de precios respecto del IPC (slide 7) ══ */
+(function grafico4() {
+  const cats = ['Superior al IPC', 'Aumento hasta el IPC', 'Sin cambios', 'Reducción'];
+  const vals = [100, 194, 2, 2];   /* Cantidad de medicamentos por categoría (suman 298) */
+  const cols = ['#006400', '#8B0000', '#6B6B6B', '#6B6B6B'];
+  const total = vals.reduce((a, b) => a + b, 0);
+  const W = 820, H = 500, x0 = 85, x1 = 795, y0 = 50, y1 = 410, ymax = 200, bw = 120;
+  const gw = (x1 - x0) / cats.length;
+  const cx = i => x0 + (i + 0.5) * gw;
+  const Y = v => y1 - v / ymax * (y1 - y0);
+  const dec = (n, d) => n.toFixed(d).replace('.', ',');
+
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cantidad de medicamentos según la variación de sus precios respecto del IPC">`;
+  s += `<text x="${(x0 + x1) / 2}" y="28" text-anchor="middle" font-size="18">Medicamentos según variación de precios respecto del IPC</text>`;
+
+  /* Cuadrícula horizontal y eje Y */
+  for (let v = 0; v <= 200; v += 25) {
+    s += `<line x1="${x0}" x2="${x1}" y1="${Y(v)}" y2="${Y(v)}" stroke="rgba(26,26,26,.12)"/>`;
+    s += `<line x1="${x0 - 5}" x2="${x0}" y1="${Y(v)}" y2="${Y(v)}" stroke="#1A1A1A"/>`;
+    s += `<text x="${x0 - 10}" y="${Y(v) + 5}" text-anchor="end" font-size="14">${v}</text>`;
+  }
+
+  /* Resaltado de la categoría (aparece al pasar el mouse) */
+  cats.forEach((c, i) => {
+    s += `<rect class="grupo-sel" x="${x0 + i * gw}" y="${y0}" width="${gw}" height="${y1 - y0}" fill="rgba(26,26,26,.09)"/>`;
+  });
+
+  /* Barras, valores y nombres de categoría */
+  cats.forEach((c, i) => {
+    const x = cx(i);
+    s += `<rect class="bar-u" data-k="${i}" data-h="${y1 - Y(vals[i])}" x="${x - bw / 2}" y="${Y(vals[i])}" width="${bw}" height="${y1 - Y(vals[i])}" fill="${cols[i]}"/>`;
+    s += `<text class="valor" style="--k:${i * 2}" x="${x}" y="${Y(vals[i]) - 8}" text-anchor="middle" font-size="15" font-weight="700">${vals[i]}</text>`;
+    s += `<line x1="${x}" x2="${x}" y1="${y1}" y2="${y1 + 5}" stroke="#1A1A1A"/>`;
+    s += `<text x="${x}" y="${y1 + 26}" text-anchor="middle" font-size="14">${c}</text>`;
+  });
+  s += `<rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" fill="none" stroke="#1A1A1A"/>`;
+
+  /* Zonas sensibles al mouse (una por categoría) */
+  cats.forEach((c, i) => {
+    s += `<rect class="hit" data-i="${i}" x="${x0 + i * gw}" y="${y0}" width="${gw}" height="${y1 - y0}" fill="transparent"/>`;
+  });
+
+  /* Títulos de ejes */
+  s += `<text x="24" y="${(y0 + y1) / 2}" transform="rotate(-90 24 ${(y0 + y1) / 2})" text-anchor="middle" font-size="14">Cantidad de medicamentos</text>`;
+  s += `<text x="${(x0 + x1) / 2}" y="${H - 12}" text-anchor="middle" font-size="14">Categoría</text>`;
+  s += `</svg>`;
+
+  const cont = document.getElementById('grafico4');
+  cont.innerHTML = `<div class="wrap">${s}<div class="tip"></div></div>`;
+
+  /* Animación: las barras crecen desde el eje X (se maneja con y/height, sin transform) */
+  window.animarBarras2 = function () {
+    if (reducirMov) return;
+    const barras = cont.querySelectorAll('.bar-u');
+    barras.forEach(r => { r.setAttribute('y', y1); r.setAttribute('height', 0); });
+    const t0 = performance.now();
+    (function paso(t) {
+      let fin = true;
+      barras.forEach(r => {
+        const k = +r.dataset.k, Ht = +r.dataset.h;
+        const p = Math.max(0, Math.min(1, (t - t0 - 500 - k * 150) / 800));
+        const e = 1 - Math.pow(1 - p, 3);
+        r.setAttribute('y', y1 - Ht * e);
+        r.setAttribute('height', Ht * e);
+        if (p < 1) fin = false;
+      });
+      if (!fin) requestAnimationFrame(paso);
+    })(t0);
+  };
+
+  /* Cartel al pasar el mouse: cantidad y porcentaje sobre el total */
+  const tip = cont.querySelector('.tip');
+  const sel = cont.querySelectorAll('.grupo-sel');
+  cont.querySelectorAll('.hit').forEach(el => {
+    const i = +el.dataset.i;
+    el.addEventListener('mouseenter', () => {
+      tip.innerHTML = `<strong>${cats[i]}</strong>${vals[i]} medicamentos<br>${dec(vals[i] / total * 100, 1)} % del total (${total})`;
+      tip.style.left = (cx(i) / W * 100) + '%';
+      tip.style.top = ((y1 - 95) / H * 100) + '%';
+      tip.style.transform = 'translate(-50%, 0)';
+      tip.style.display = 'block';
+      sel[i].style.opacity = 1;
+    });
+    el.addEventListener('mouseleave', () => {
+      tip.style.display = 'none';
+      sel[i].style.opacity = 0;
+    });
+  });
+})();
+
+/* ══ Fondo Animado con Íconos y Transparencias Variadas ══ */
+(function fondo() {
+  const lienzoF = document.getElementById('fondo'), ctx = lienzoF.getContext('2d');
+  
+  const ICONOS = [
+    new Path2D("M18.36,5.64a5,5 0 0 0 -7.07,0l-5.65,5.65a5,5 0 0 0 7.07,7.07l5.65,-5.65a5,5 0 0 0 0,-7.07Zm-1.41,5.66l-2.83,2.83 -4.24,-4.24 2.83,-2.83a3,3 0 0 1 4.24,4.24Z"), // Cápsula
+    new Path2D("M12,2A10,10 0 1 0 22,12A10,10 0 0 0 12,2ZM12,20A8,8 0 1 1 20,12A8,8 0 0 1 12,20ZM7,11H17V13H7Z"), // Tableta
+    new Path2D("M10.5 2v5.5H5v7h5.5V20h5v-5.5H21v-7h-5.5V2h-5z"), // Cruz Farmacia
+    new Path2D("M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"), // Receta
+    new Path2D("M19.8 18.4 14 10V4h1V2H9v2h1v6L4.2 18.4c-.7 1.1-.1 2.6 1.3 2.6h13c1.4 0 2-1.5 1.3-2.6zM6.5 19l4.5-6.5V4h2v8.5l4.5 6.5H6.5z") // Frasco Laboratorio
+  ];
+
+  const COLORES = [
+    'rgba(169, 205, 177, 0.15)', 
+    'rgba(169, 205, 177, 0.35)', 
+    'rgba(169, 205, 177, 0.55)', 
+    'rgba(26, 26, 26, 0.05)', 
+    'rgba(26, 26, 26, 0.12)'
+  ];
+  
+  let W, H, d, iconosFlotantes = [];
+  const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  
+  function medir() {
+    d = devicePixelRatio || 1; 
+    W = lienzoF.width = innerWidth * d; 
+    H = lienzoF.height = innerHeight * d;
+    iconosFlotantes = Array.from({ length: 28 }, (_, i) => ({ 
+      path: ICONOS[i % ICONOS.length], 
+      x: Math.random() * W, 
+      y: Math.random() * H,
+      v: (0.10 + Math.random() * 0.22) * d, 
+      tam: (18 + Math.random() * 28) * d, 
+      c: COLORES[Math.floor(Math.random() * COLORES.length)] 
+    }));
+  }
+  
+  function dibujar() {
+    ctx.clearRect(0, 0, W, H);
+    iconosFlotantes.forEach(p => {
+      ctx.fillStyle = p.c; 
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.scale(p.tam / 24, p.tam / 24);
+      ctx.fill(p.path);
+      ctx.restore();
+
+      if (!quieto) { 
+        p.y -= p.v; 
+        if (p.y < -40 * d) { 
+          p.y = H + 30 * d; 
+          p.x = Math.random() * W; 
+        } 
+      }
+    });
+    if (!quieto) requestAnimationFrame(dibujar);
+  }
+  
+  addEventListener('resize', medir); 
+  medir(); 
+  dibujar();
+})();
+</script>
+</body>
+</html>
