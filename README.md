@@ -36,8 +36,6 @@ El análisis se desarrolla en **Python y Google Colab**, con las librerías `pan
 2. Ejecutar las celdas del notebook en orden.
 3. Descargar y guardar el notebook ejecutado en formato `.ipynb`.
 
-La ruta `/content/Dataset_farmacia.csv` corresponde a Google Colab, no a una carpeta de la computadora local.
-
 ## Entregables
 
 El repositorio grupal debe contener, como mínimo:
